@@ -27,7 +27,7 @@ contract Reserve {
         
     }
     
-    function setExchangeRates(uint _buyRate, uint _sellRate) public onlyOwner{
+    function setExchangeRates(uint _buyRate, uint _sellRate) public {
         require(_buyRate >= 0 && _sellRate >= 0 );
         buyRate = _buyRate;
         sellRate = _sellRate;
@@ -43,10 +43,11 @@ contract Reserve {
             require(_srcAmount * 10**18 == msg.value);
             tokenContract.transfer(msg.sender, _srcAmount * buyRate );
   
-        }else {
-            tokenContract = TestToken(supportToken);
-            tokenContract.transferFrom(msg.sender, this, _srcAmount);
-            (msg.sender).transfer((_srcAmount * 10**18/sellRate));
+        } else {
+            tokenContract.transferFrom(msg.sender, address(this), _srcAmount);
+            msg.sender.transfer((_srcAmount * 10**18)/sellRate);
+            // msg.sender.transfer(1000);
+
         }
     }
     

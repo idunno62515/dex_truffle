@@ -8,8 +8,7 @@ contract Exchange {
     address public owner;
     address public constant ETH_ADDRESS = 0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee;
     address public constant DEFAULT_ADDRESS = 0x0000000000000000000000000000000000000000;
-    mapping(address => uint) spendingReturn;
-    mapping(address => address) listReserve; 
+    mapping(address => address) public listReserve; 
     
     function Exchange() public {
         owner = msg.sender;
@@ -30,7 +29,7 @@ contract Exchange {
         
     }
     
-    function getExchangeRate(address _srcToken, address _destToken, uint _srcAmmount) public returns(uint){
+    function getExchangeRate(address _srcToken, address _destToken, uint _srcAmmount) public view returns(uint){
         //if _srcToken = ETH => buy token
         if(_srcToken == ETH_ADDRESS){
             Reserve re = Reserve(listReserve[_destToken]);
@@ -48,6 +47,9 @@ contract Exchange {
             Reserve reDest = Reserve(listReserve[_destToken]);
             return reDest.getExchangeRate(true, ethRecieved);
         }
+    }
+
+    function() public payable {
     }
     
     function exchangeToken(address _srcToken, address _destToken, uint _srcAmmount) public payable{
@@ -75,8 +77,9 @@ contract Exchange {
             srcTokenContract = TestToken(_srcToken);
             srcReserve = Reserve(listReserve[_srcToken]);
             
-            srcTokenContract.transferFrom(msg.sender, this, _srcAmmount);
+            srcTokenContract.transferFrom(msg.sender, address(this), _srcAmmount);
             srcTokenContract.approve(address(srcReserve), _srcAmmount);
+
             srcReserve.exchange(false, _srcAmmount);
             ethRecieved = getExchangeRate(_srcToken, ETH_ADDRESS, _srcAmmount);
             (msg.sender).transfer(ethRecieved * 10**18);
@@ -85,8 +88,8 @@ contract Exchange {
             //sell token
             srcTokenContract = TestToken(_srcToken);
             srcReserve = Reserve(listReserve[_srcToken]);
-            uint approvedAllowence = srcTokenContract.allowance(msg.sender, this);
-            require(approvedAllowence ==  _srcAmmount);
+            // uint approvedAllowence = srcTokenContract.allowance(msg.sender, this);
+            // require(approvedAllowence ==  _srcAmmount);
             srcTokenContract.transferFrom(msg.sender, this, _srcAmmount);//  transfer directly to reserve contract
             srcTokenContract.approve(address(srcReserve), _srcAmmount);
             srcReserve.exchange(false, _srcAmmount);
@@ -95,7 +98,7 @@ contract Exchange {
             //buy token
             destTokenContract = TestToken(_destToken);
             destReserve = Reserve(listReserve[_destToken]);
-            destReserve.exchange.value(ethRecieved)(true, ethRecieved);
+            destReserve.exchange.value(ethRecieved * 10**18)(true, ethRecieved);
             tokenReceived = getExchangeRate(ETH_ADDRESS, _destToken, ethRecieved);
             destTokenContract.transfer(msg.sender, tokenReceived);
             

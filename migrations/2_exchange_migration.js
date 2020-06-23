@@ -9,7 +9,7 @@ const Reserve  = artifacts.require("Reserve");
 const Exchange  = artifacts.require("Exchange");
 
 
-module.exports = async function(deployer) {
+module.exports = async function(deployer, network, accounts) {
   // deployer.deploy(TestToken, "TokenA", "TKA", 18).then(function(){
   //   return deployer.deploy(Reserve, TestToken.address);
   // }).then(function(){
@@ -35,4 +35,23 @@ module.exports = async function(deployer) {
   const exchageCtr = await Exchange.deployed();
   await exchageCtr.addReserve(reserveA.address, tokenA.address, true);
 
+  await exchageCtr.exchangeToken('0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee', tokenA.address, 10, 
+  {from:accounts[1], value: web3.utils.toWei('10', 'ether')})
+
+  await tokenA.approve(exchageCtr.address, 6, {from:accounts[1]})
+
 };
+
+
+/*
+
+a = await TestToken.at(_a)
+re = await Reserve.at(_re)
+ex = await Exchange.at(_ex)
+
+
+
+ex.exchangeToken(_a, '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee', 6, {from:accounts[1]})
+
+
+*/
