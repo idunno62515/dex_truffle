@@ -11,14 +11,18 @@ contract Reserve {
     Fund public funds;
     
     address public owner;
+    uint private constant decimals;
+    uint private constant inWei = 10 ** 18;
     address public supportToken;
-    uint public buyRate = 10;
+    uint public buyRate = 10; 
     uint public sellRate = 10;
     address public constant ETH_ADDRESS = 0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee;
     
     function Reserve(address _supportToken) public {
         owner = msg.sender;
         supportToken = _supportToken;
+        TestToken tokenContract = TestToken(supportToken);
+        decimals = tokenContract.decimals();
         funds.ethStored = 0;
         funds.tokenStored = 1000000;
     }
@@ -51,12 +55,12 @@ contract Reserve {
     function getExchangeRate(bool _isBuy, uint _srcAmount) public view returns(uint){
         if(_isBuy) {
             if(funds.tokenStored > 0){
-                return buyRate * _srcAmount;
+                return (_srcAmount / buyRate) * (10 ** decimals);
             }
             return 0;
         }else {
             if(funds.ethStored > 0){
-                return _srcAmount / sellRate;
+                return (_srcAmount / sellRate) * inWei;
             }
             return 0;
         }
