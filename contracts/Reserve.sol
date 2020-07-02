@@ -24,7 +24,7 @@ contract Reserve {
         TestToken tokenContract = TestToken(supportToken);
         decimals = tokenContract.decimals();
         funds.ethStored = 0;
-        funds.tokenStored = 1000000;
+        funds.tokenStored = 1000000 * (10 ** decimals);
     }
 
     function() public payable {
@@ -33,16 +33,16 @@ contract Reserve {
     
     function withdrawFunds(address _token, uint _amount, address _destAddress) public onlyOwner{
         if(_token == ETH_ADDRESS){
-            uint amountInWei = _amount * 10**18;
+            uint amountInWei = _amount * inWei;
             require(funds.ethStored > 0 && amountInWei > 0 && amountInWei <= funds.ethStored);
-            _destAddress.transfer(_amount * amountInWei);
+            _destAddress.transfer( amountInWei);
             funds.ethStored -= amountInWei;
         }
         if(_token == supportToken){
             require(funds.tokenStored > 0 && _amount > 0  && _amount <= funds.tokenStored);
             TestToken tokenContract = TestToken(supportToken);
-            tokenContract.transfer(_destAddress, _amount);
-            funds.tokenStored -= _amount;
+            tokenContract.transfer(_destAddress, _amount * (10 ** decimals));
+            funds.tokenStored -= _amount * (10 ** decimals);
         }
     }
     
@@ -55,31 +55,37 @@ contract Reserve {
     function getExchangeRate(bool _isBuy, uint _srcAmount) public view returns(uint){
         if(_isBuy) {
             if(funds.tokenStored > 0){
-                return (_srcAmount / buyRate) * (10 ** decimals);
+                return (((_srcAmount * (10**decimals) * (10 ** decimals)) / inWei)  / buyRate) ;
             }
             return 0;
         }else {
             if(funds.ethStored > 0){
-                return (_srcAmount / sellRate) * inWei;
+                return ((_srcAmount * 10**decimals * inWei) / sellRate) ;
             }
             return 0;
         }
+    }
+
+    function toDecimal(uint _value) private pure return (uint) {
+        return _value * (10 ** decimals);
     }
     
     function exchange(bool _isBuy, uint _srcAmount) public payable {
         TestToken tokenContract = TestToken(supportToken);
         if(_isBuy){
             require(funds.tokenStored > 0);
-            require(_srcAmount * 10**18 == msg.value);
-            tokenContract.transfer(msg.sender, _srcAmount * buyRate );
-            funds.tokenStored -= (_srcAmount * buyRate);
+            require(_srcAmount == msg.value);
+            uint transferAmount = getExchangeRate(true, msg.value);
+            tokenContract.transfer(msg.sender, transferAmount);
+            funds.tokenStored -= transferAmount;
             funds.ethStored += msg.value;
         } else {
             require(funds.ethStored > 0);
-            tokenContract.transferFrom(msg.sender, address(this), _srcAmount);
-            msg.sender.transfer((_srcAmount * 10**18)/sellRate);
-            funds.tokenStored += _srcAmount;
-            funds.ethStored -= ((_srcAmount * 10**18)/sellRate);
+            tokenContract.transferFrom(msg.sender, address(this), _srcAmount * 10**decimals);
+            uint transferAmount = getExchangeRate(false, _srcAmount);
+            msg.sender.transfer(transferAmount);
+            funds.tokenStored += _srcAmount * 10**decimals;
+            funds.ethStored -= transferAmount;
         }
     }
     
