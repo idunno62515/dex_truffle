@@ -22,6 +22,7 @@ module.exports = async function(deployer, network, accounts) {
   // deployer.deploy(TestToken, "TokenB", "TKB", 18).then(function(){
   //   return deployer.deploy(Reserve, TestToken.address);
   // });
+  let transferAmount = 10 * 10** 18;
 
   await deployer.deploy(TestToken, "TokenA", "TKA", 18);
   const tokenA =  await TestToken.deployed();
@@ -33,29 +34,31 @@ module.exports = async function(deployer, network, accounts) {
 
   await deployer.deploy(Reserve, tokenA.address);
   const reserveA = await Reserve.deployed();
-  await tokenA.transfer(reserveA.address, '1000000');
-  await reserveA.setExchangeRates(2, 3);
+  await tokenA.transfer(reserveA.address, transferAmount.toString());
+  await reserveA.setExchangeRates((5 * 10 ** 17)+'', 2 * 10 ** 18 + '');
 
   await deployer.deploy(Reserve, tokenB.address);
   const reserveB = await Reserve.deployed();
-  await tokenB.transfer(reserveB.address, '1000000');
-  await reserveB.setExchangeRates(3, 4);
+  await tokenB.transfer(reserveB.address, transferAmount.toString());
+  await reserveB.setExchangeRates(4 * 10 ** 18 + '', 25 * 10 ** 16 + '');
 
   await deployer.deploy(Exchange);
   const exchageCtr = await Exchange.deployed();
   await exchageCtr.addReserve(reserveA.address, tokenA.address, true);
   await exchageCtr.addReserve(reserveB.address, tokenB.address, true);
 
-  await exchageCtr.exchangeToken('0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee', tokenA.address, 12, 
-  {from:accounts[1], value: web3.utils.toWei('12', 'ether')})
 
-  await tokenA.approve(exchageCtr.address, 24, {from:accounts[1]})
+
+  // await exchageCtr.exchangeToken('0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee', tokenA.address, 12 * 10 ** 18 + '', 
+  // {from:accounts[1], value: web3.utils.toWei('12', 'ether')})
+
+  // await tokenA.approve(exchageCtr.address, 24 * 10 ** 18 + '', {from:accounts[1]})
 
 };
 
 
 /*
-
+_e = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
 _a = '0x6Ac72CD74b460E9444A16CB117A2dA95222166A2'
 _b = '0x511dFA130fd9DB521DA6Fa38e1cF47A6d476DC7F'
 _ra = '0xe26205C7A48a7626117Ad3A13DB2Ef323aF45bec'

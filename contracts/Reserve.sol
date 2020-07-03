@@ -11,8 +11,8 @@ contract Reserve {
     Fund public funds;
     
     address public owner;
-    uint private constant decimals;
-    uint private constant inWei = 10 ** 18;
+    uint public decimals;
+    uint public constant inWei = 10 ** 18;
     address public supportToken;
     uint public buyRate = 10; 
     uint public sellRate = 10;
@@ -60,31 +60,32 @@ contract Reserve {
             return 0;
         }else {
             if(funds.ethStored > 0){
-                return ((_srcAmount * 10**decimals * inWei) / sellRate) ;
+                return ((_srcAmount * (10**decimals) * inWei) / sellRate) ;
             }
             return 0;
         }
     }
 
-    function toDecimal(uint _value) private pure return (uint) {
+    function toDecimal(uint _value) private view returns(uint) {
         return _value * (10 ** decimals);
     }
     
     function exchange(bool _isBuy, uint _srcAmount) public payable {
         TestToken tokenContract = TestToken(supportToken);
+        uint transferAmount;
         if(_isBuy){
             require(funds.tokenStored > 0);
             require(_srcAmount == msg.value);
-            uint transferAmount = getExchangeRate(true, msg.value);
+            transferAmount = getExchangeRate(true, msg.value);
             tokenContract.transfer(msg.sender, transferAmount);
             funds.tokenStored -= transferAmount;
             funds.ethStored += msg.value;
         } else {
             require(funds.ethStored > 0);
-            tokenContract.transferFrom(msg.sender, address(this), _srcAmount * 10**decimals);
-            uint transferAmount = getExchangeRate(false, _srcAmount);
+            tokenContract.transferFrom(msg.sender, address(this), _srcAmount * (10**decimals));
+            transferAmount = getExchangeRate(false, _srcAmount);
             msg.sender.transfer(transferAmount);
-            funds.tokenStored += _srcAmount * 10**decimals;
+            funds.tokenStored += _srcAmount * (10**decimals);
             funds.ethStored -= transferAmount;
         }
     }

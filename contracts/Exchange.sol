@@ -59,9 +59,11 @@ contract Exchange {
         TestToken destTokenContract;
         Reserve srcReserve;
         Reserve destReserve;
-        uint ethRecieved;
+        uint weiRecieved;
         uint tokenReceived;
         
+        uint tokenDecimal;
+        uint amountInDecimal;
           //if _srcToken = ETH => buy token
           
         if(_srcToken == ETH_ADDRESS){
@@ -78,8 +80,8 @@ contract Exchange {
             srcTokenContract = TestToken(_srcToken);
             srcReserve = Reserve(listReserve[_srcToken]);
             
-            uint tokenDecimal = srcTokenContract.decimals();
-            uint amountInDecimal = _srcAmmount * 10 ** tokenDecimal;
+            tokenDecimal = srcTokenContract.decimals();
+            amountInDecimal = _srcAmmount * 10 ** tokenDecimal;
 
             srcTokenContract.transferFrom(msg.sender, address(this), amountInDecimal);
             srcTokenContract.approve(address(srcReserve), amountInDecimal);
@@ -95,8 +97,8 @@ contract Exchange {
             // uint approvedAllowence = srcTokenContract.allowance(msg.sender, this);
             // require(approvedAllowence ==  _srcAmmount);
 
-            uint tokenDecimal = srcTokenContract.decimals();
-            uint amountInDecimal = _srcAmmount * 10 ** tokenDecimal;
+            tokenDecimal = srcTokenContract.decimals();
+            amountInDecimal = _srcAmmount * 10 ** tokenDecimal;
 
             srcTokenContract.transferFrom(msg.sender, this, amountInDecimal);//  transfer directly to reserve contract
             srcTokenContract.approve(address(srcReserve), amountInDecimal);
