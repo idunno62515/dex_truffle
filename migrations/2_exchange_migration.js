@@ -22,7 +22,7 @@ module.exports = async function(deployer, network, accounts) {
   // deployer.deploy(TestToken, "TokenB", "TKB", 18).then(function(){
   //   return deployer.deploy(Reserve, TestToken.address);
   // });
-  let transferAmount = 1000000 * 10** 18;
+  let transferAmount = 1000000 * 10 ** 18;
 
   await deployer.deploy(TestToken, "TokenA", "TKA", 18);
   const tokenA =  await TestToken.deployed();
@@ -34,12 +34,12 @@ module.exports = async function(deployer, network, accounts) {
 
   await deployer.deploy(Reserve, tokenA.address);
   const reserveA = await Reserve.deployed();
-  await tokenA.transfer(reserveA.address, transferAmount.toString());
+  await tokenA.transfer(reserveA.address, String(10n ** 24n));
   await reserveA.setExchangeRates(String(5 * 10 ** 17), String(2 * 10 ** 18));
 
   await deployer.deploy(Reserve, tokenB.address);
   const reserveB = await Reserve.deployed();
-  await tokenB.transfer(reserveB.address, transferAmount.toString());
+  await tokenB.transfer(reserveB.address, String(10n ** 24n));
   await reserveB.setExchangeRates(String(4 * 10 ** 18), String(25 * 10 ** 16));
 
   await deployer.deploy(Exchange);
@@ -65,6 +65,8 @@ _b = '0x511dFA130fd9DB521DA6Fa38e1cF47A6d476DC7F'
 _ra = '0xe26205C7A48a7626117Ad3A13DB2Ef323aF45bec'
 _rb = '0x1f209187E10269bbC340C3631867cf597676e054'
 _ex = '0xE1548fC78352ED595968E827453a2a283184F59a'
+
+
 
 
 
