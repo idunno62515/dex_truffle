@@ -33,16 +33,16 @@ contract Reserve {
     
     function withdrawFunds(address _token, uint _amount, address _destAddress) public onlyOwner{
         if(_token == ETH_ADDRESS){
-            uint amountInWei = _amount * inWei;
-            require(funds.ethStored > 0 && amountInWei > 0 && amountInWei <= funds.ethStored);
-            _destAddress.transfer( amountInWei);
-            funds.ethStored -= amountInWei;
+            
+            require(funds.ethStored > 0 && _amount > 0 && _amount <= funds.ethStored);
+            _destAddress.transfer(_amount);
+            funds.ethStored -= _amount;
         }
         if(_token == supportToken){
             require(funds.tokenStored > 0 && _amount > 0  && _amount <= funds.tokenStored);
             TestToken tokenContract = TestToken(supportToken);
-            tokenContract.transfer(_destAddress, _amount * (10 ** decimals));
-            funds.tokenStored -= _amount * (10 ** decimals);
+            tokenContract.transfer(_destAddress, _amount);
+            funds.tokenStored -= _amount;
         }
     }
     
