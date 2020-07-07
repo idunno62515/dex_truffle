@@ -22,7 +22,7 @@ module.exports = async function(deployer, network, accounts) {
   // deployer.deploy(TestToken, "TokenB", "TKB", 18).then(function(){
   //   return deployer.deploy(Reserve, TestToken.address);
   // });
-  let transferAmount = 10 * 10** 18;
+  let transferAmount = 1000000 * 10** 18;
 
   await deployer.deploy(TestToken, "TokenA", "TKA", 18);
   const tokenA =  await TestToken.deployed();
@@ -35,20 +35,21 @@ module.exports = async function(deployer, network, accounts) {
   await deployer.deploy(Reserve, tokenA.address);
   const reserveA = await Reserve.deployed();
   await tokenA.transfer(reserveA.address, transferAmount.toString());
-  await reserveA.setExchangeRates((5 * 10 ** 17)+'', 2 * 10 ** 18 + '');
+  await reserveA.setExchangeRates(String(5 * 10 ** 17), String(2 * 10 ** 18));
 
   await deployer.deploy(Reserve, tokenB.address);
   const reserveB = await Reserve.deployed();
   await tokenB.transfer(reserveB.address, transferAmount.toString());
-  await reserveB.setExchangeRates(4 * 10 ** 18 + '', 25 * 10 ** 16 + '');
+  await reserveB.setExchangeRates(String(4 * 10 ** 18), String(25 * 10 ** 16));
 
   await deployer.deploy(Exchange);
   const exchageCtr = await Exchange.deployed();
   await exchageCtr.addReserve(reserveA.address, tokenA.address, true);
   await exchageCtr.addReserve(reserveB.address, tokenB.address, true);
 
-
-
+  await web3.eth.sendTransaction({from:accounts[0], to: reserveA.address, value: web3.utils.toWei('40', 'ether')});
+  await web3.eth.sendTransaction({from:accounts[0], to: reserveB.address, value: web3.utils.toWei('40', 'ether')});
+  
   // await exchageCtr.exchangeToken('0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee', tokenA.address, 12 * 10 ** 18 + '', 
   // {from:accounts[1], value: web3.utils.toWei('12', 'ether')})
 
@@ -75,7 +76,7 @@ ex = await Exchange.at(_ex)
 
 
 
-ex.exchangeToken(_a, '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee', 24, {from:accounts[1]})
+ex.exchangeToken(_a, '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee', 1, {from:accounts[1]})
 
 
 eth 12 -> 24 A -> 8 eth -> 24 B -> 6 eth

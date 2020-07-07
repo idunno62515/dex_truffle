@@ -15,7 +15,7 @@ contract Exchange {
         owner = msg.sender;
     }
     
-    function addReserve(address _reserve, address _token, bool _isAdd) public returns(bool){
+    function addReserve(address _reserve, address _token, bool _isAdd) public onlyOwner returns(bool){
         if(_isAdd) {
             // Reserve reserve = Reserve(_reserve);
             // if (reserve.supportToken() != _token){
@@ -62,8 +62,7 @@ contract Exchange {
         uint weiRecieved;
         uint tokenReceived;
         
-        uint tokenDecimal;
-        uint amountInDecimal;
+        uint approvedAllowence;
           //if _srcToken = ETH => buy token
           
         if(_srcToken == ETH_ADDRESS){
@@ -80,11 +79,11 @@ contract Exchange {
             srcTokenContract = TestToken(_srcToken);
             srcReserve = Reserve(listReserve[_srcToken]);
             
-            tokenDecimal = srcTokenContract.decimals();
-            amountInDecimal = _srcAmmount * 10 ** tokenDecimal;
+            approvedAllowence = srcTokenContract.allowance(msg.sender, this);
+            require(approvedAllowence >= _srcAmmount);
 
-            srcTokenContract.transferFrom(msg.sender, address(this), amountInDecimal);
-            srcTokenContract.approve(address(srcReserve), amountInDecimal);
+            srcTokenContract.transferFrom(msg.sender, address(this), _srcAmmount);
+            srcTokenContract.approve(address(srcReserve), _srcAmmount);
 
             srcReserve.exchange(false, _srcAmmount);
             weiRecieved = getExchangeRate(_srcToken, ETH_ADDRESS, _srcAmmount);
@@ -94,14 +93,12 @@ contract Exchange {
             //sell token
             srcTokenContract = TestToken(_srcToken);
             srcReserve = Reserve(listReserve[_srcToken]);
-            // uint approvedAllowence = srcTokenContract.allowance(msg.sender, this);
-            // require(approvedAllowence ==  _srcAmmount);
 
-            tokenDecimal = srcTokenContract.decimals();
-            amountInDecimal = _srcAmmount * 10 ** tokenDecimal;
+            approvedAllowence = srcTokenContract.allowance(msg.sender, this);
+            require(approvedAllowence >= _srcAmmount);
 
-            srcTokenContract.transferFrom(msg.sender, this, amountInDecimal);//  transfer directly to reserve contract
-            srcTokenContract.approve(address(srcReserve), amountInDecimal);
+            srcTokenContract.transferFrom(msg.sender, this, _srcAmmount);
+            srcTokenContract.approve(address(srcReserve), _srcAmmount);
             srcReserve.exchange(false, _srcAmmount);
             weiRecieved = getExchangeRate(_srcToken, ETH_ADDRESS, _srcAmmount);
             
@@ -114,6 +111,11 @@ contract Exchange {
             destTokenContract.transfer(msg.sender, tokenReceived);
             
         }
+    }
+
+    modifier onlyOwner {
+        require(msg.sender == owner);
+        _;
     }
     
 }

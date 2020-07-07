@@ -60,7 +60,7 @@ contract Reserve {
             return 0;
         }else {
             if(funds.ethStored > 0){
-                return ((_srcAmount * (10**decimals) * inWei) / sellRate) ;
+                return ((_srcAmount * (10**decimals) * inWei) )/ (sellRate * (10**decimals));
             }
             return 0;
         }
@@ -82,10 +82,10 @@ contract Reserve {
             funds.ethStored += msg.value;
         } else {
             require(funds.ethStored > 0);
-            tokenContract.transferFrom(msg.sender, address(this), _srcAmount * (10**decimals));
+            tokenContract.transferFrom(msg.sender, address(this), _srcAmount);
             transferAmount = getExchangeRate(false, _srcAmount);
             msg.sender.transfer(transferAmount);
-            funds.tokenStored += _srcAmount * (10**decimals);
+            funds.tokenStored += _srcAmount;
             funds.ethStored -= transferAmount;
         }
     }
