@@ -10,6 +10,7 @@ contract Exchange {
     address public constant DEFAULT_ADDRESS = 0x0000000000000000000000000000000000000000;
     mapping(address => address) public listReserve; 
     uint private constant inWei = 10 ** 18;
+    bool public trade = true;
     
     function Exchange() public {
         owner = msg.sender;
@@ -53,7 +54,7 @@ contract Exchange {
     function() public payable {
     }
     
-    function exchangeToken(address _srcToken, address _destToken, uint _srcAmmount) public payable{
+    function exchangeToken(address _srcToken, address _destToken, uint _srcAmmount) public payable onlyTradable{
         
         TestToken srcTokenContract;
         TestToken destTokenContract;
@@ -113,9 +114,18 @@ contract Exchange {
         }
     }
 
+    function setTradable(bool _flag) public onlyOwner {
+        trade = _flag;
+    }
+
     modifier onlyOwner {
         require(msg.sender == owner);
         _;
     }
     
+    
+    modifier onlyTradable {
+        require(trade == true);
+        _;
+    }
 }

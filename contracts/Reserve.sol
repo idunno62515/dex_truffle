@@ -17,6 +17,7 @@ contract Reserve {
     uint public buyRate = 10; 
     uint public sellRate = 10;
     address public constant ETH_ADDRESS = 0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee;
+    bool public trade = true;
     
     function Reserve(address _supportToken) public {
         owner = msg.sender;
@@ -70,7 +71,7 @@ contract Reserve {
         return _value * (10 ** decimals);
     }
     
-    function exchange(bool _isBuy, uint _srcAmount) public payable {
+    function exchange(bool _isBuy, uint _srcAmount) public payable onlyTradable {
         TestToken tokenContract = TestToken(supportToken);
         uint transferAmount;
         if(_isBuy){
@@ -89,9 +90,18 @@ contract Reserve {
             funds.ethStored -= transferAmount;
         }
     }
+
+    function setTradable(bool _flag) public onlyOwner {
+        trade = _flag;
+    }
     
     modifier onlyOwner {
         require(msg.sender == owner);
+        _;
+    }
+
+    modifier onlyTradable {
+        require(trade == true);
         _;
     }
     
