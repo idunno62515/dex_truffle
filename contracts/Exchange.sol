@@ -80,8 +80,7 @@ contract Exchange {
             srcTokenContract = TestToken(_srcToken);
             srcReserve = Reserve(listReserve[_srcToken]);
             
-            approvedAllowence = srcTokenContract.allowance(msg.sender, this);
-            require(approvedAllowence >= _srcAmmount);
+   
 
             srcTokenContract.transferFrom(msg.sender, address(this), _srcAmmount);
             srcTokenContract.approve(address(srcReserve), _srcAmmount);
@@ -95,8 +94,7 @@ contract Exchange {
             srcTokenContract = TestToken(_srcToken);
             srcReserve = Reserve(listReserve[_srcToken]);
 
-            approvedAllowence = srcTokenContract.allowance(msg.sender, this);
-            require(approvedAllowence >= _srcAmmount);
+          
 
             srcTokenContract.transferFrom(msg.sender, this, _srcAmmount);
             srcTokenContract.approve(address(srcReserve), _srcAmmount);
