@@ -63,7 +63,6 @@ contract Exchange {
         uint weiRecieved;
         uint tokenReceived;
         
-        uint approvedAllowence;
           //if _srcToken = ETH => buy token
           
         if(_srcToken == ETH_ADDRESS){
