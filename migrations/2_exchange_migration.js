@@ -65,11 +65,6 @@ _b = '0x511dFA130fd9DB521DA6Fa38e1cF47A6d476DC7F'
 _ra = '0xe26205C7A48a7626117Ad3A13DB2Ef323aF45bec'
 _rb = '0x1f209187E10269bbC340C3631867cf597676e054'
 _ex = '0xE1548fC78352ED595968E827453a2a283184F59a'
-
-
-
-
-
 a = await TestToken.at(_a)
 b = await TestToken.at(_b)
 ra = await Reserve.at(_ra)

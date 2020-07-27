@@ -18,10 +18,6 @@ contract Exchange {
     
     function addReserve(address _reserve, address _token, bool _isAdd) public onlyOwner returns(bool){
         if(_isAdd) {
-            // Reserve reserve = Reserve(_reserve);
-            // if (reserve.supportToken() != _token){
-            //     return false;
-            // }
             listReserve[_token] = _reserve;
             return true;
         }else {
@@ -79,8 +75,6 @@ contract Exchange {
             srcTokenContract = TestToken(_srcToken);
             srcReserve = Reserve(listReserve[_srcToken]);
             
-   
-
             srcTokenContract.transferFrom(msg.sender, address(this), _srcAmmount);
             srcTokenContract.approve(address(srcReserve), _srcAmmount);
 
@@ -92,8 +86,6 @@ contract Exchange {
             //sell token
             srcTokenContract = TestToken(_srcToken);
             srcReserve = Reserve(listReserve[_srcToken]);
-
-          
 
             srcTokenContract.transferFrom(msg.sender, this, _srcAmmount);
             srcTokenContract.approve(address(srcReserve), _srcAmmount);
