@@ -4593,9 +4593,9 @@
           }
         ],
         "contractDependencies": [
+          1202,
           1074,
-          1114,
-          1202
+          1114
         ],
         "contractKind": "contract",
         "documentation": "Standard ERC20 token\n * https://github.com/ethereum/EIPs/issues/20\nBased on code by FirstBlood:\nhttps://github.com/Firstbloodio/token/blob/master/smart_contract/FirstBloodToken.sol",
@@ -6165,10 +6165,10 @@
           }
         ],
         "contractDependencies": [
+          1202,
           1074,
           1114,
-          1326,
-          1202
+          1326
         ],
         "contractKind": "contract",
         "documentation": "/////////////////////////////////////////////////////////////////////////////",
@@ -12088,9 +12088,9 @@
           }
         ],
         "contractDependencies": [
+          1202,
           1074,
-          1114,
-          1202
+          1114
         ],
         "contractKind": "contract",
         "documentation": "Standard ERC20 token\n * https://github.com/ethereum/EIPs/issues/20\nBased on code by FirstBlood:\nhttps://github.com/Firstbloodio/token/blob/master/smart_contract/FirstBloodToken.sol",
@@ -13660,10 +13660,10 @@
           }
         ],
         "contractDependencies": [
+          1202,
           1074,
           1114,
-          1326,
-          1202
+          1326
         ],
         "contractKind": "contract",
         "documentation": "/////////////////////////////////////////////////////////////////////////////",
@@ -15311,6 +15311,74 @@
     "version": "0.4.17+commit.bdeb9e52.Emscripten.clang"
   },
   "networks": {
+    "4": {
+      "events": {
+        "0xcc16f5dbb4873280815c1ee09dbd06736cffcc184412cf7a71a0fdb75d397ca5": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "_burner",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "_value",
+              "type": "uint256"
+            }
+          ],
+          "name": "Burn",
+          "type": "event"
+        },
+        "0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "owner",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "name": "spender",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "value",
+              "type": "uint256"
+            }
+          ],
+          "name": "Approval",
+          "type": "event"
+        },
+        "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "from",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "name": "to",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "value",
+              "type": "uint256"
+            }
+          ],
+          "name": "Transfer",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0x1b107a69081621e5f216e7BC217A2F942dBA54E2",
+      "transactionHash": "0xa3b8b953603c4807d68d053f757e29b6cac9c218f2db8f19a4bace3f15148f72"
+    },
     "5777": {
       "events": {
         "0xcc16f5dbb4873280815c1ee09dbd06736cffcc184412cf7a71a0fdb75d397ca5": {
@@ -15381,8 +15449,7 @@
     }
   },
   "schemaVersion": "3.1.0",
-  "updatedAt": "2020-07-27T04:41:23.481Z",
-  "networkType": "ethereum",
+  "updatedAt": "2020-07-28T09:11:37.533Z",
   "devdoc": {
     "methods": {}
   },

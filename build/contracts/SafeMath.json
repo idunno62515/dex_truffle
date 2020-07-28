@@ -4285,9 +4285,9 @@
           }
         ],
         "contractDependencies": [
+          1202,
           1074,
-          1114,
-          1202
+          1114
         ],
         "contractKind": "contract",
         "documentation": "Standard ERC20 token\n * https://github.com/ethereum/EIPs/issues/20\nBased on code by FirstBlood:\nhttps://github.com/Firstbloodio/token/blob/master/smart_contract/FirstBloodToken.sol",
@@ -5857,10 +5857,10 @@
           }
         ],
         "contractDependencies": [
+          1202,
           1074,
           1114,
-          1326,
-          1202
+          1326
         ],
         "contractKind": "contract",
         "documentation": "/////////////////////////////////////////////////////////////////////////////",
@@ -11780,9 +11780,9 @@
           }
         ],
         "contractDependencies": [
+          1202,
           1074,
-          1114,
-          1202
+          1114
         ],
         "contractKind": "contract",
         "documentation": "Standard ERC20 token\n * https://github.com/ethereum/EIPs/issues/20\nBased on code by FirstBlood:\nhttps://github.com/Firstbloodio/token/blob/master/smart_contract/FirstBloodToken.sol",
@@ -13352,10 +13352,10 @@
           }
         ],
         "contractDependencies": [
+          1202,
           1074,
           1114,
-          1326,
-          1202
+          1326
         ],
         "contractKind": "contract",
         "documentation": "/////////////////////////////////////////////////////////////////////////////",
@@ -15004,7 +15004,7 @@
   },
   "networks": {},
   "schemaVersion": "3.1.0",
-  "updatedAt": "2020-07-27T04:41:15.124Z",
+  "updatedAt": "2020-07-28T09:11:37.512Z",
   "devdoc": {
     "methods": {}
   },
